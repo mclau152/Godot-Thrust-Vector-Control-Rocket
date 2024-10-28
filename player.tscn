@@ -1,0 +1,70 @@
+[gd_scene load_steps=7 format=3 uid="uid://cj3j5w4rhri0a"]
+
+[ext_resource type="Script" path="res://player.gd" id="1_w5hvj"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_wju3w"]
+height = 5.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vlje0"]
+albedo_color = Color(0.62599, 0, 0.276639, 1)
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_fdfek"]
+height = 1.0
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_qw10l"]
+emission_shape_scale = Vector3(0.2, 0.1, 0.2)
+emission_shape = 3
+emission_box_extents = Vector3(1, 1, 1)
+angle_min = 1.07288e-05
+angle_max = 1.07288e-05
+direction = Vector3(0, -1, 0)
+spread = 2.0
+initial_velocity_min = 9.0
+initial_velocity_max = 10.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_kid2l"]
+radius = 0.1
+height = 0.2
+
+[node name="Node3D" type="Node3D"]
+script = ExtResource("1_w5hvj")
+
+[node name="ConeTwistJoint3D" type="ConeTwistJoint3D" parent="."]
+node_a = NodePath("../RigidBody3D")
+node_b = NodePath("../RigidBody3D2")
+
+[node name="RigidBody3D" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+mass = 50.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
+shape = SubResource("CylinderShape3D_wju3w")
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="RigidBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
+height = 5.0
+material = SubResource("StandardMaterial3D_vlje0")
+
+[node name="Camera3D" type="Camera3D" parent="RigidBody3D"]
+transform = Transform3D(1, 0, 0, 0, 0.592351, 0.80568, 0, -0.80568, 0.592351, 0, 19.7531, 12)
+
+[node name="RigidBody3D2" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
+mass = 10.0
+angular_damp = 13.131
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+shape = SubResource("CylinderShape3D_fdfek")
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="RigidBody3D2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+height = 1.0
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="RigidBody3D2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+emitting = false
+lifetime = 0.2
+process_material = SubResource("ParticleProcessMaterial_qw10l")
+draw_pass_1 = SubResource("SphereMesh_kid2l")
